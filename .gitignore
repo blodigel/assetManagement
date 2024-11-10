@@ -1,0 +1,6 @@
+app/.venv
+app/asset_management.egg-info
+app/.DS_Store
+app/setup.py
+.github/workflows
+app_backup

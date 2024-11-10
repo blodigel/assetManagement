@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      pull_policy: always
+      context: ./app
+      dockerfile: dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/
+      - DATABASE_NAME=asset_management
+    volumes:
+      - ./app/src:/code/src # For hot reloading
+    depends_on:
+      - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build: ./asset-management/
+    pull_policy: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./asset-management:/app
+      - /app/node_modules # Prevents overwriting node_modules
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo:latest
+    pull_policy: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_data:
