@@ -16,7 +16,7 @@ const AzureView = () => {
       try {
         setLoading(true);
         const [infraResponse, customersResponse] = await Promise.all([
-          infrastructureService.getAllLocations(),
+          infrastructureService.getAllInfrastructure(),
           customerService.getAllCustomers(),
         ]);
         
@@ -37,7 +37,7 @@ const AzureView = () => {
 
   const handleCreate = async (newInfrastructure) => {
     try {
-      const response = await infrastructureService.createLocation({
+      const response = await infrastructureService.createInfrastructure({
         ...newInfrastructure,
         type: 'azure'
       });
@@ -51,7 +51,7 @@ const AzureView = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this Azure infrastructure?")) {
       try {
-        await infrastructureService.deleteLocation(id);
+        await infrastructureService.deleteInfrastructure(id);
         setInfrastructure(infrastructure.filter((item) => item.id !== id));
       } catch (error) {
         console.error("Error deleting infrastructure:", error);

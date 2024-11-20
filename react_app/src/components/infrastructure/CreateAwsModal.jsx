@@ -47,6 +47,8 @@ const CreateAwsModal = ({ isOpen, onClose, onCreate, customers }) => {
     "ap-southeast-1",
     "ap-southeast-2",
     "ap-northeast-1",
+    "sa-east-1",
+    "ca-central-1",
   ];
 
   if (!isOpen) return null;
@@ -83,7 +85,7 @@ const CreateAwsModal = ({ isOpen, onClose, onCreate, customers }) => {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="e.g., Production AWS Environment"
+              placeholder="e.g., Production AWS Account"
             />
           </div>
 
@@ -110,21 +112,6 @@ const CreateAwsModal = ({ isOpen, onClose, onCreate, customers }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              rows={2}
-              placeholder="Brief description of this AWS infrastructure"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
               Region *
             </label>
             <select
@@ -134,10 +121,7 @@ const CreateAwsModal = ({ isOpen, onClose, onCreate, customers }) => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  config: {
-                    ...formData.config,
-                    region: e.target.value,
-                  },
+                  config: { ...formData.config, region: e.target.value },
                 })
               }
             >
@@ -162,13 +146,25 @@ const CreateAwsModal = ({ isOpen, onClose, onCreate, customers }) => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  config: {
-                    ...formData.config,
-                    vpc_id: e.target.value,
-                  },
+                  config: { ...formData.config, vpc_id: e.target.value },
                 })
               }
               placeholder="e.g., vpc-12345678"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              rows={2}
+              placeholder="Brief description of this AWS infrastructure"
             />
           </div>
 

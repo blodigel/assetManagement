@@ -17,7 +17,7 @@ const OnPremiseView = () => {
       try {
         setLoading(true);
         const [infraResponse, customersResponse, sitesResponse] = await Promise.all([
-          infrastructureService.getAllLocations(),
+          infrastructureService.getAllInfrastructure(),
           customerService.getAllCustomers(),
           siteService.getAllSites(),
         ]);
@@ -40,7 +40,7 @@ const OnPremiseView = () => {
 
   const handleCreate = async (newInfrastructure) => {
     try {
-      const response = await infrastructureService.createLocation({
+      const response = await infrastructureService.createInfrastructure({
         ...newInfrastructure,
         type: 'on_premise'
       });
@@ -54,7 +54,7 @@ const OnPremiseView = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this on-premise infrastructure?")) {
       try {
-        await infrastructureService.deleteLocation(id);
+        await infrastructureService.deleteInfrastructure(id);
         setInfrastructure(infrastructure.filter((item) => item.id !== id));
       } catch (error) {
         console.error("Error deleting infrastructure:", error);

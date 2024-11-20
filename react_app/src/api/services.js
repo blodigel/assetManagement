@@ -11,6 +11,8 @@ export const assetService = {
 export const customerService = {
   getAllCustomers: () => apiClient.get('/customers'),
   createCustomer: (customer) => apiClient.post('/customers', customer),
+  updateCustomer: (id, customer) => apiClient.put(`/customers/${id}`, customer),
+  deleteCustomer: (id) => apiClient.delete(`/customers/${id}`),
 };
 
 export const siteService = {
@@ -22,12 +24,12 @@ export const siteService = {
 };
 
 export const infrastructureService = {
-  getAllLocations: () => apiClient.get('/infrastructure'),
-  getLocationsByCustomer: (customerId) => apiClient.get(`/infrastructure?customer_id=${customerId}`),
-  getLocationsBySite: (siteId) => apiClient.get(`/infrastructure?site_id=${siteId}`),
-  createLocation: (infrastructure) => apiClient.post('/infrastructure', infrastructure),
-  updateLocation: (id, infrastructure) => apiClient.put(`/infrastructure/${id}`, infrastructure),
-  deleteLocation: (id) => apiClient.delete(`/infrastructure/${id}`),
+  getAllInfrastructure: () => apiClient.get('/infrastructure'),
+  getInfrastructureByCustomer: (customerId) => apiClient.get(`/infrastructure?customer_id=${customerId}`),
+  getInfrastructureBySite: (siteId) => apiClient.get(`/infrastructure?site_id=${siteId}`),
+  createInfrastructure: (infrastructure) => apiClient.post('/infrastructure', infrastructure),
+  updateInfrastructure: (id, infrastructure) => apiClient.put(`/infrastructure/${id}`, infrastructure),
+  deleteInfrastructure: (id) => apiClient.delete(`/infrastructure/${id}`),
   getInfrastructureTypes: () => [
     { id: 'host', name: 'Physical Host', description: 'Physical server hosting VMs' },
     { id: 'datacenter', name: 'Data Center', description: 'On-premise data center' },
@@ -39,5 +41,5 @@ export const infrastructureService = {
     { id: 'gcp', name: 'Google Cloud Platform' },
     { id: 'other', name: 'Other Cloud Provider' },
   ],
-  getVMsByLocation: (locationId) => apiClient.get(`/infrastructure/${locationId}/vms`),
+  getVMsByInfrastructure: (infrastructureId) => apiClient.get(`/infrastructure/${infrastructureId}/vms`),
 };

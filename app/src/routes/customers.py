@@ -105,16 +105,30 @@ async def update_customer(customer_id: str, customer: CustomerUpdate, db=Depends
 @router.delete("/{customer_id}")
 async def delete_customer(customer_id: str, db=Depends(get_database)):
     """
-    Delete a customer by ID.
+    Delete a customer and all associated data (sites, infrastructure).
     """
     try:
+        # Check if customer exists
+        customer = await db.customers.find_one({"_id": ObjectId(customer_id)})
+        if not customer:
+            raise HTTPException(status_code=404, detail="Customer not found")
+
+        # Delete all infrastructure associated with this customer
+        await db.infrastructure.delete_many({"customer_id": customer_id})
+        
         # Delete all sites associated with this customer
         await db.sites.delete_many({"customer_id": customer_id})
         
-        # Then delete the customer
+        # Finally delete the customer
         result = await db.customers.delete_one({"_id": ObjectId(customer_id)})
-        if result.deleted_count == 0:
-            raise HTTPException(status_code=404, detail="Customer not found")
-        return {"message": "Customer and associated sites deleted successfully"}
+        
+        return {
+            "message": "Customer and all associated data deleted successfully",
+            "deleted": {
+                "customer": True,
+                "sites": True,
+                "infrastructure": True
+            }
+        }
     except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid customer ID")

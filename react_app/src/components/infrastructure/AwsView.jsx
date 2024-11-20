@@ -16,7 +16,7 @@ const AwsView = () => {
       try {
         setLoading(true);
         const [infraResponse, customersResponse] = await Promise.all([
-          infrastructureService.getAllLocations(),
+          infrastructureService.getAllInfrastructure(),
           customerService.getAllCustomers(),
         ]);
         
@@ -37,7 +37,7 @@ const AwsView = () => {
 
   const handleCreate = async (newInfrastructure) => {
     try {
-      const response = await infrastructureService.createLocation({
+      const response = await infrastructureService.createInfrastructure({
         ...newInfrastructure,
         type: 'aws'
       });
@@ -51,7 +51,7 @@ const AwsView = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this AWS infrastructure?")) {
       try {
-        await infrastructureService.deleteLocation(id);
+        await infrastructureService.deleteInfrastructure(id);
         setInfrastructure(infrastructure.filter((item) => item.id !== id));
       } catch (error) {
         console.error("Error deleting infrastructure:", error);

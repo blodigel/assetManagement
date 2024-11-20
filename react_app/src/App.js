@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Server,
   Network,
   Shield,
   Users,
@@ -11,7 +10,8 @@ import {
   LayoutDashboard,
   Cloud,
   Database,
-  Home
+  Home,
+  Server
 } from 'lucide-react';
 
 import VirtualMachinesView from './components/assets/VirtualMachinesView';
@@ -57,46 +57,49 @@ const App = () => {
       id: 'azure',
       label: 'Azure',
       icon: <Cloud className="w-4 h-4" />,
+      component: <AzureView />
     },
     {
       id: 'aws',
       label: 'AWS',
       icon: <Cloud className="w-4 h-4" />,
+      component: <AwsView />
     },
     {
       id: 'datacenter',
       label: 'Datacenter',
       icon: <Database className="w-4 h-4" />,
+      component: <DatacenterView />
     },
     {
       id: 'on_premise',
       label: 'On-Premise',
       icon: <Home className="w-4 h-4" />,
+      component: <OnPremiseView />
     }
   ];
 
   const renderContent = () => {
+    // Check infrastructure views first
+    const infrastructureView = infrastructureTypes.find(type => type.id === currentView);
+    if (infrastructureView) {
+      return infrastructureView.component;
+    }
+
+    // Then check asset views
+    const assetView = assetTypes.find(type => type.id === currentView);
+    if (assetView) {
+      return assetView.component;
+    }
+
+    // Finally check other views
     switch (currentView) {
       case 'dashboard':
         return <Dashboard onNavigate={setCurrentView} />;
-      case 'vms':
-        return <VirtualMachinesView />;
-      case 'switches':
-        return <NetworkDevicesView deviceType="switch" />;
-      case 'firewalls':
-        return <NetworkDevicesView deviceType="firewall" />;
       case 'customers':
         return <CustomersView />;
       case 'sites':
         return <SitesView />;
-      case 'azure':
-        return <AzureView />;
-      case 'aws':
-        return <AwsView />;
-      case 'datacenter':
-        return <DatacenterView />;
-      case 'on_premise':
-        return <OnPremiseView />;
       default:
         return <Dashboard onNavigate={setCurrentView} />;
     }
